@@ -1,0 +1,211 @@
+\documentclass{presentation_fg}
+\usepackage[export]{adjustbox}
+\usepackage{amsmath}
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title[AI Pontryagin]{AI Pontryagin or how artificial neural networks learn to control dynamical systems} % The short title in the optional parameter appears at the bottom of every slide, the full title in the main parameter is only on the title page
+
+% \subtitle{Optional Subtitle} % Presentation subtitle, remove this command if a subtitle isn't required
+
+\author[Filip Gwardecki]{Lucas B\"ottcher \and Nino Antulov-Fantulin \and Thomas Asikis} % Presenter name(s), the optional parameter can contain a shortened version to appear on the bottom of every slide, while the main parameter will appear on the title slide
+
+
+\institute[]{\small Opublikowany 17 stycznia 2022 r. w \smallskip \newline \textit{Nature Communications}} % Your institution, the optional parameter can be used for the institution shorthand and will appear on the bottom of every slide after author names, while the required parameter is used on the title slide and can include your email address or additional information on separate lines
+
+\date[28.11.2022 r.]{} % Presentation date or conference/meeting name, the optional parameter can contain a shortened version to appear on the bottom of every slide, while the required parameter value is output to the title slide
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SLIDE
+%----------------------------------------------------------------------------------------
+
+\begin{frame}
+	\titlepage % Output the title slide, automatically created using the text entered in the PRESENTATION INFORMATION block above
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+%	TABLE OF CONTENTS SLIDE
+%----------------------------------------------------------------------------------------
+
+% The table of contents outputs the sections and subsections that appear in your presentation, specified with the standard \section and \subsection commands. You may either display all sections and subsections on one slide with \tableofcontents, or display each section at a time on subsequent slides with \tableofcontents[pausesections]. The latter is useful if you want to step through each section and mention what you will discuss.
+
+
+%----------------------------------------------------------------------------------------
+%	PRESENTATION BODY SLIDES
+%----------------------------------------------------------------------------------------
+
+\section{Wprowadzenie} % Sections are added in order to organize your presentation into discrete blocks, all sections and subsections are automatically output to the table of contents as an overview of the talk but NOT output in the presentation as separate slides
+
+%------------------------------------------------
+
+\begin{frame}
+	\frametitle{Przedstawiona problematyka} % Slide title, remove this command for no title
+	\pause
+	{\Large Sterowanie minimalizujące energię}
+	\pause
+	\begin{block}{Sformułowanie wariacyjne}
+		$J=\int\nolimits_{0}^{T}L({{{{{{{\bf{x}}}}}}}}(t^{\prime} ),{{{{{{{\bf{u}}}}}}}}(t^{\prime} ))\ {{{{{\rm{d}}}}}}t^{\prime} +C({{{{{{{\bf{x}}}}}}}}(T))$
+	\end{block}
+	\pause
+	\begin{figure}
+		\includegraphics[width=0.5\linewidth]{complexity.jpg}
+	\end{figure}
+
+	% \tableofcontents % Output the table of contents (all sections on one slide)
+	%\tableofcontents[pausesections] % Output the table of contents (break sections up across separate slides)
+
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Rozwiązanie}
+	\pause
+	{\Huge Sztuczne sieci neuronowe!}
+	\pause
+	\begin{figure}
+		\includegraphics[width=0.6\linewidth,left]{ANN.png}
+	\end{figure}
+\end{frame}
+
+{
+	\setbeamertemplate{background}{}
+\begin{frame}
+	\frametitle{Rozwiązanie}
+	Budowa sieci:
+	\begin{itemize}
+		\item Jeden neuron liniowy w warstwie wejściowej, którego wejściem jest czas
+		\pause
+		\item Jedna warstwa ukryta z kilkoma neuronami ELU
+		\pause
+		\begin{figure}
+			\includegraphics[width = 0.6\linewidth, left]{elu.png}
+		\end{figure} 
+		\pause
+		\item Warstwa wyjściowa złożona z liczbie neuronów równej liczbie wejść układu dynamicznego
+	\end{itemize}
+\end{frame}
+}
+
+%------------------------------------------------
+
+\begin{frame}
+	\frametitle{Proces uczenia sieci}
+	\pause
+	\begin{block}{Funkcja kosztu}
+		$J({{{{{{{\bf{x}}}}}}}}(T),{{{{{{{{\bf{x}}}}}}}}}^{* })=\frac{1}{N}\parallel \!\!{{{{{{{\bf{x}}}}}}}}(T)-{{{{{{{{\bf{x}}}}}}}}}^{* }{\parallel }_{2}^{2}$
+	\end{block}
+	\bigskip
+	\pause
+	\begin{exampleblock}{Metoda najszybszego spadku}
+		${{{{{{{{\bf{w}}}}}}}}}^{(n+1)}={{{{{{{{\bf{w}}}}}}}}}^{(n)}-\eta {\nabla }_{{{{{{{{{\bf{w}}}}}}}}}^{(n)}}J({{{{{{{\bf{x}}}}}}}},{{{{{{{{\bf{x}}}}}}}}}^{* })$
+	\end{exampleblock}
+	
+\end{frame}
+
+{
+	\setbeamertemplate{background}{}
+\begin{frame}
+	\frametitle{Proces uczenia sieci}
+	\begin{figure}
+		\includegraphics[width = \linewidth]{1step.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Proces uczenia sieci}
+	\begin{figure}
+		\includegraphics[width = \linewidth]{2step.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Proces uczenia sieci}
+	\begin{figure}
+		\includegraphics[width = \linewidth]{3step.png}
+	\end{figure}
+\end{frame}
+%------------------------------------------------
+
+\section{Wyniki}
+
+\begin{frame}
+	\frametitle{Liniowy układ dynamiczny}
+	\begin{figure}
+		\includegraphics[width = \linewidth]{linear system 1.png}
+	\end{figure}
+\end{frame}
+}
+%------------------------------------------------
+
+\begin{frame}
+	\frametitle{Oscylatory Kuramoto}
+	\begin{minipage}{0.3\linewidth}
+		${\dot{{{\boldsymbol{\Theta}}}}}(t)=	\; {{{\boldsymbol{\Omega }}}}+{{{\boldsymbol{f}}}}({{{\boldsymbol{\Theta }}}}(t),{{{\boldsymbol{u}}}}(t))$
+		\\
+		${{{\boldsymbol{\Theta }}}}(0)=	\; {{{{\boldsymbol{\theta }}}}}_{0}$
+	\end{minipage}
+	\pause
+	\begin{minipage}{0.45\linewidth}
+		\begin{figure}
+			\includegraphics[width = 0.6\linewidth]{kuramoto.jpg}
+		\end{figure}		
+	\end{minipage}
+	\pause
+	${f}_{i}({{{\boldsymbol{\Theta }}}}(t),{{{\boldsymbol{u}}}}(t))=\frac{K{u}_{i}(t)}{N}\mathop{\sum }\limits_{j=1}^{N}{A}_{ij}\sin ({\theta }_{j}(t)-{\theta }_{i}(t))$
+	\pause
+	\begin{block}{Funkcja kosztu}
+		${J}({{{\boldsymbol{\Theta }}}}(T))=\frac{1}{2}\mathop{\sum}\limits_{i,j}{A}_{ij}{\sin }^{2}({\theta }_{j}(T)-{\theta }_{i}(T))$
+	\end{block}
+\end{frame}
+
+{
+	\setbeamertemplate{background}{}
+\begin{frame}
+	\frametitle{Oscylatory Kuramoto}
+	\begin{figure}
+		\includegraphics[width = \linewidth]{kuramoto_ai.png}
+	\end{figure}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Oscylatory Kuramoto}
+	\begin{figure}
+		\includegraphics[width = .9\linewidth]{aip_agm.png}
+	\end{figure}
+\end{frame}
+}
+
+
+\begin{frame} % Use [allowframebreaks] to allow automatic splitting across slides if the content is too long
+	\frametitle{Żródło}
+	
+	\begin{thebibliography}{99} % Beamer does not support BibTeX so references must be inserted manually as below, you may need to use multiple columns and/or reduce the font size further if you have many references
+		\footnotesize % Reduce the font size in the bibliography
+		
+		\bibitem[Smith, 2022]{p1}
+			Lucas B\"otcher, Nino Antulov-Fantulin, Thomas Asikis (2022)
+			\newblock AI Pontryagin or how artificial neural networks learn to control
+			dynamical systems
+			\newblock \emph{Nature Communications} 13 (333)
+	\end{thebibliography}
+\end{frame}
+
+\begin{frame}[plain] % The optional argument 'plain' hides the headline and footline
+	\begin{center}
+		{\Huge Koniec}
+		
+		\bigskip\bigskip % Vertical whitespace
+		
+		{\LARGE Dziękuję za uwagę}
+	\end{center}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+
+\end{document} 
